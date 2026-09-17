@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QADR Global — Client Portal</title><link rel="stylesheet" href="/styles.css"></head>
+<body class="portal">
+<aside class="sidebar">
+  <a class="brand" href="/"><img src="/assets/logo.svg" alt="QADR Global"></a>
+  <div class="portal-tag">CLIENT PORTAL</div>
+  <nav id="nav">
+    <a class="active" data-view="overview">▣ <span>Overview</span></a>
+    <a data-view="accounts">◫ <span>Accounts</span></a>
+    <a data-view="performance">⌁ <span>Performance</span></a>
+    <a data-view="risk">◉ <span>Risk</span></a>
+    <a data-view="execution">↗ <span>Execution</span></a>
+    <a data-view="reports">▤ <span>Reports</span></a>
+    <a data-view="documents">▧ <span>Documents</span></a>
+    <a data-view="activity">◷ <span>Activity</span></a>
+    <a data-view="insights">✦ <span>Insights</span></a>
+    <a data-view="support">? <span>Support</span></a>
+    <a data-view="settings">⚙ <span>Settings</span></a>
+  </nav>
+  <a class="back" href="/">← Public website</a>
+</aside>
+<main class="portal-main">
+<header class="portal-header"><div><p class="eyebrow">CLIENT OPERATIONS</p><h1 id="title">Overview</h1></div><div class="top-actions"><input placeholder="Search..."><span>◔</span><span class="user">Client ▾</span></div></header>
+
+<section id="overview" class="view active">
+<div class="metrics"><div><small>TOTAL BALANCE</small><strong>—</strong><em>No data</em></div><div><small>EQUITY</small><strong>—</strong><em>No data</em></div><div><small>OPEN POSITIONS</small><strong>—</strong><em>No data</em></div><div><small>DAILY P/L</small><strong>—</strong><em>No data</em></div></div>
+<div class="dash-grid">
+<section class="panel equity"><header><h2>Equity Curve</h2><span>1D · 1W · 1M · 3M · 1Y</span></header><div class="empty"><div class="empty-icon">▧</div><b>No data available</b><p>Connect your MT5 account to see performance charts.</p></div></section>
+<section class="panel account-status"><header><h2>Account Status</h2></header><div class="rows"><p><span>MT5 Connection</span><b class="red">Not Connected</b></p><p><span>Server</span><b>—</b></p><p><span>Login</span><b>—</b></p><p><span>Leverage</span><b>—</b></p><p><span>Currency</span><b>—</b></p><p><span>Last Update</span><b>—</b></p></div></section>
+<section class="panel"><header><h2>Recent Activity</h2><span>View All →</span></header><div class="activity-empty"><p>○ No data</p><p>○ No data</p><p>○ No data</p><p>○ No data</p></div></section>
+<section class="panel"><header><h2>Performance Summary</h2></header><div class="empty compact"><div class="empty-icon">▧</div><b>No data available</b><p>Connect your MT5 account to see performance analytics.</p></div></section>
+<section class="panel wide"><header><h2>Accounts</h2><button>+ Add Account</button></header><div class="empty compact"><div class="empty-icon">▧</div><b>No accounts added</b><p>Click “Add Account” to connect your MT5 account.</p></div></section>
+<section class="panel wide"><header><h2>Execution / Recent Trades</h2><span>Orders &nbsp; Positions &nbsp; History</span></header><div class="empty compact"><div class="empty-icon">▧</div><b>No trade data available</b><p>Connect your account to view execution history.</p></div></section>
+</div></section>
+
+<section id="accounts" class="view"><div class="page-title"><p class="eyebrow">ACCOUNTS</p><h2>Manage and monitor your trading accounts.</h2></div><section class="panel standalone"><header><h2>Connected Accounts</h2><button>+ Add Account</button></header><div class="empty"><div class="empty-icon">▧</div><b>No connected accounts</b><p>Approved MT5 accounts will appear here.</p></div></section></section>
+<section id="performance" class="view"><div class="page-title"><p class="eyebrow">PERFORMANCE</p><h2>Performance analytics.</h2></div><div class="metrics"><div><small>RETURN</small><strong>—</strong></div><div><small>DRAWDOWN</small><strong>—</strong></div><div><small>TRADES</small><strong>—</strong></div><div><small>PROFIT FACTOR</small><strong>—</strong></div></div><section class="panel standalone"><header><h2>Equity Curve</h2></header><div class="empty"><b>No performance series</b><p>Real account history will populate this view.</p></div></section></section>
+<section id="risk" class="view"><div class="page-title"><p class="eyebrow">RISK</p><h2>Risk & exposure.</h2></div><div class="risk-grid"><div class="risk"><small>EXPOSURE</small><strong>—</strong></div><div class="risk"><small>DRAWDOWN</small><strong>—</strong></div><div class="risk"><small>OPEN RISK</small><strong>—</strong></div></div></section>
+<section id="execution" class="view"><div class="page-title"><p class="eyebrow">EXECUTION</p><h2>Orders, positions and trade history.</h2></div><section class="panel standalone"><header><h2>Execution Activity</h2><span>LIVE + HISTORICAL</span></header><div class="empty"><b>No execution records available.</b></div></section></section>
+<section id="reports" class="view"><div class="page-title"><p class="eyebrow">REPORTS</p><h2>Reports and statements.</h2></div><section class="panel standalone"><header><h2>Available Reports</h2></header><div class="empty"><b>No reports generated.</b></div></section></section>
+<section id="documents" class="view"><div class="page-title"><p class="eyebrow">DOCUMENTS</p><h2>Secure client documents.</h2></div><section class="panel standalone"><header><h2>Documents</h2></header><div class="empty"><b>No documents available.</b></div></section></section>
+<section id="activity" class="view"><div class="page-title"><p class="eyebrow">ACTIVITY / AUDIT</p><h2>Audited system activity.</h2></div><section class="panel standalone"><header><h2>Event Timeline</h2></header><div class="empty"><b>No audited events available.</b></div></section></section>
+<section id="insights" class="view"><div class="page-title"><p class="eyebrow">INSIGHTS</p><h2>Research & market intelligence.</h2></div><div class="portal-insights"><article><img src="/assets/global.jpg"><b>Market Intelligence</b><p>Approved market insights will appear here.</p></article><article><img src="/assets/gold.jpg"><b>Quantitative Research</b><p>Approved research outputs will appear here.</p></article></div></section>
+<section id="support" class="view"><div class="page-title"><p class="eyebrow">SUPPORT</p><h2>Client support.</h2></div><section class="panel standalone support"><h2>Need assistance?</h2><p>Contact QADR Global client support.</p><a class="gold-button" href="mailto:support@QadrGlobal.com">Contact Support</a></section></section>
+<section id="settings" class="view"><div class="page-title"><p class="eyebrow">SETTINGS</p><h2>Portal settings.</h2></div><section class="panel standalone"><header><h2>Preferences</h2></header><div class="empty"><b>Settings will appear for authenticated clients.</b></div></section></section>
+</main>
+<script src="/portal.js"></script>
+</body></html>
