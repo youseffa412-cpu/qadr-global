@@ -1,15 +1,9 @@
-# QADR Global — Final Visual Mockup V1
+# QADR Global — Architecture-Built Website
 
-This package implements the approved visual direction from the reference:
-- premium black/gold institutional public website
-- image-led homepage
-- global markets, solutions, technology and insights
-- secure client portal with sidebar navigation
-- responsive desktop/tablet/mobile layouts
-- no fabricated live account or market values
+This build implements the QADR Global visual architecture as real HTML/CSS components rather than embedding the architecture/mockup as an image.
 
-This is a UI/product package. Production MT5/API/PostgreSQL integration should be connected after visual approval.
-
-
-## Embedded product visual
-The generated QADR Global public-site + client-portal visual is embedded directly in the homepage and used as the hero visual. File: `public/assets/qadr-global-product-visual.png`.
+- Public institutional website
+- Real navigation, hero, solution cards, markets, technology architecture, insights and client portal CTA
+- Separate client portal page
+- No composite architecture/mockup image is used
+- `render.yaml` is at repository root for Render Blueprint deployment
