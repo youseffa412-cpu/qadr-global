@@ -1,83 +1,457 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="QADR Global — Financial Markets, Technology & Intelligence.">
-<title>QADR Global — Financial Markets, Technology & Intelligence</title>
-<link rel="stylesheet" href="/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QADR Global | Enterprise Multi-User Operations Terminal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+    <style>
+        :root {
+            --bg-base: #020617;
+            --bg-sidebar: rgba(3, 7, 18, 0.98);
+            --bg-card: rgba(15, 23, 42, 0.92);
+            --bg-header: rgba(2, 6, 23, 0.95);
+            --border-subtle: rgba(56, 189, 248, 0.12);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --accent-gold: #D4AF37;
+            --accent-gold-glow: rgba(212, 175, 55, 0.2);
+            --accent-blue: #38BDF8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-base: #EAECEF;
+            --bg-sidebar: #F1F3F5;
+            --bg-card: #FFFFFF;
+            --bg-header: rgba(241, 243, 245, 0.95);
+            --border-subtle: rgba(0, 0, 0, 0.12);
+            --text-primary: #000000;
+            --text-secondary: #212529;
+            --accent-gold: #92400E;
+            --accent-gold-glow: rgba(146, 64, 14, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.6; overflow-x: hidden; }
+
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--bg-header); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle); padding: 12px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .exotic-logo-svg { width: 38px; height: 38px; filter: drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
+        .brand-title { font-size: 17px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.5px; }
+        .brand-title span { color: var(--accent-gold); }
+
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 13.5px; transition: var(--transition); }
+        nav a:hover { color: var(--accent-gold); }
+
+        .btn {
+            padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: var(--transition); text-decoration: none; border: none;
+            display: inline-flex; align-items: center; gap: 8px; justify-content: center;
+        }
+        .btn-outline { background: transparent; color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+        .btn-primary { background: linear-gradient(135deg, #D4AF37, #996515); color: #000; font-weight: 600; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px var(--accent-gold-glow); }
+
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 8px; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #334155; transition: .3s; border-radius: 22px; border: 1px solid var(--border-subtle); }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-gold); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .hero-container {
+            position: relative; height: 85vh; width: 100%; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; margin-top: 60px;
+        }
+        .hero-slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease-in-out;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hero-slide.active { opacity: 1; }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(2,6,23,0.5) 0%, rgba(2,6,23,0.95) 100%);
+        }
+        .hero-content { position: relative; z-index: 2; text-align: center; max-width: 850px; padding: 0 20px; }
+        
+        .quantum-robot-avatar {
+            width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 20px;
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80');
+            background-size: cover; background-position: center;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(56, 189, 248, 0.5);
+            animation: pulseRobot 3s infinite ease-in-out;
+        }
+        @keyframes pulseRobot {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(56, 189, 248, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        }
+
+        .hero-content h1 { font-size: 40px; font-weight: 600; line-height: 1.2; margin-bottom: 15px; color: #FFFFFF !important; }
+        .hero-content p { font-size: 15px; color: #E2E8F0 !important; margin-bottom: 30px; }
+
+        .section { padding: 70px 6%; border-top: 1px solid var(--border-subtle); }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 30px; font-weight: 600; color: var(--text-primary); }
+        .section-header p { color: var(--text-secondary); font-size: 14.5px; margin-top: 6px; }
+
+        .operations-section {
+            position: relative; padding: 80px 6%; border-top: 1px solid var(--border-subtle);
+            background: linear-gradient(180deg, rgba(2,6,23,0.88), rgba(2,6,23,0.96)), url('https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .operations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; position: relative; z-index: 2; }
+        .op-module-card {
+            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-subtle); border-radius: 12px;
+            overflow: hidden; backdrop-filter: blur(12px); transition: var(--transition); border-top: 3px solid var(--accent-gold);
+        }
+        .op-module-card:hover { transform: translateY(-4px); border-color: var(--accent-gold); }
+        .op-module-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border-subtle); }
+        .op-module-body { padding: 22px; }
+        .op-module-body h3 { font-size: 18px; font-weight: 600; color: #FFF; margin-bottom: 8px; }
+        .op-module-body p { font-size: 13.5px; color: #E2E8F0; line-height: 1.6; margin-bottom: 12px; }
+
+        .auth-gateway-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2,6,23,0.92); backdrop-filter: blur(20px);
+            z-index: 4000; display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .auth-card {
+            background: var(--bg-card); border: 1px solid var(--accent-gold);
+            border-radius: 16px; width: 100%; max-width: 440px; padding: 35px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9); text-align: center;
+        }
+        .auth-tabs { display: flex; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px; }
+        .auth-tab { flex: 1; padding: 10px; background: transparent; border: none; color: var(--text-secondary); font-weight: 600; cursor: pointer; font-size: 14px; transition: var(--transition); }
+        .auth-tab.active { color: var(--accent-gold); border-bottom: 2px solid var(--accent-gold); }
+        .auth-form-pane { display: none; text-align: left; }
+        .auth-form-pane.active { display: block; }
+
+        .enterprise-portal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-base); z-index: 3000; display: none; flex-direction: column; overflow: hidden;
+        }
+
+        .shell-header {
+            background: var(--bg-header); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; height: 60px; flex-shrink: 0;
+        }
+
+        .portal-top-nav-menu { display: flex; gap: 8px; align-items: center; margin-left: 20px; }
+        .portal-top-btn {
+            background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary);
+            padding: 5px 10px; border-radius: 6px; font-size: 11.5px; font-weight: 500; cursor: pointer; transition: var(--transition);
+        }
+        .portal-top-btn.active, .portal-top-btn:hover { background: var(--bg-card); border-color: var(--accent-gold); color: var(--accent-gold); }
+        @media (max-width: 900px) { .portal-top-nav-menu { display: none; } }
+
+        .shell-body { display: flex; flex: 1; overflow: hidden; position: relative; }
+        
+        .shell-sidebar {
+            width: 210px; background: var(--bg-sidebar); backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; padding: 15px 0; transition: var(--transition); flex-shrink: 0; overflow-y: auto; z-index: 10;
+        }
+        .shell-sidebar.collapsed { width: 0; padding: 0; overflow: hidden; border: none; }
+
+        .sidebar-brand-top { padding: 0 15px 15px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .sidebar-heading { font-size: 9.5px; font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; padding: 8px 15px 4px; }
+        .sidebar-nav-btn {
+            background: transparent; border: none; color: var(--text-primary); text-align: left;
+            padding: 10px 15px; font-weight: 500; font-size: 12.5px; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; gap: 10px; width: 100%; border-left: 3px solid transparent;
+        }
+        .sidebar-nav-btn.active, .sidebar-nav-btn:hover { background: var(--bg-card); color: var(--text-primary); border-left-color: var(--accent-gold); }
+        .sidebar-nav-btn svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+
+        .shell-viewport { flex: 1; background: var(--bg-base); overflow-y: auto; padding: 30px; display: flex; flex-direction: column; }
+        .shell-pane { display: none; animation: fadeIn 0.3s ease-in-out; flex: 1; flex-direction: column; }
+        .shell-pane.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        select, input { background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 10px 14px; border-radius: 6px; font-size: 13px; font-family: var(--font-sans); }
+        select:focus, input:focus { border-color: var(--accent-gold); outline: none; }
+
+        .metrics-grid-pro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-bottom: 25px; }
+        .metric-card-pro { background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px); }
+        .metric-num { font-size: 24px; font-weight: 600; font-family: var(--font-mono); margin-top: 6px; }
+
+        .text-green { color: var(--success); }
+        .text-red { color: var(--danger); }
+        .text-gold { color: var(--accent-gold); }
+
+        #equityChartCanvas { width: 100%; height: 340px; background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-subtle); }
+        
+        .terminal-viewport-box { flex: 1; width: 100%; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-subtle); margin-top: 15px; background: var(--bg-card); position: relative; min-height: 65vh; transition: var(--transition); }
+        .terminal-viewport-box.zoomed-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 5000; border-radius: 0; padding: 10px; background: var(--bg-base); }
+
+        .news-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .news-table th, .news-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: var(--transition); color: var(--text-primary); }
+        .news-table tr:hover td { background: rgba(56, 189, 248, 0.08); }
+        .news-table th { color: var(--text-primary); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; cursor: default; }
+
+        .quote-box {
+            position: relative; background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(212,175,55,0.1));
+            border-left: 4px solid var(--accent-blue); padding: 28px; border-radius: 10px; margin-bottom: 25px;
+            font-style: italic; font-size: 15.5px; overflow: hidden; border: 1px solid rgba(56,189,248,0.2); color: var(--text-primary);
+        }
+        .settings-vertical-stack { display: flex; flex-direction: column; gap: 25px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .settings-card-item { background: var(--bg-sidebar); border: 1px solid var(--border-subtle); padding: 30px; border-radius: 12px; color: var(--text-primary); }
+
+        footer {
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.85) 0%, rgba(2, 6, 23, 0.98) 100%);
+            backdrop-filter: blur(16px); color: #FFFFFF !important; padding: 60px 6% 25px; border-top: 1px solid var(--border-subtle);
+        }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 35px; margin-bottom: 35px; }
+        @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+        .footer-col h4 { color: #FFFFFF !important; margin-bottom: 15px; font-size: 15px; font-weight: 600; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 6px; }
+        .footer-col ul li a { color: #E2E8F0 !important; text-decoration: none; transition: var(--transition); cursor: pointer; }
+        .footer-col ul li a:hover { color: var(--accent-gold) !important; }
+        footer p, footer span, footer div { color: #FFFFFF !important; }
+    </style>
 </head>
-<body class="public">
-<header class="topbar">
-  <a class="brand" href="/"><img src="/assets/logo.svg" alt="QADR Global"></a>
-  <nav><a href="#company">About</a><a href="#solutions">Solutions</a><a href="#markets">Markets</a><a href="#technology">Technology</a><a href="#insights">Insights</a><a href="#contact">Contact</a></nav>
-  <a class="gold-button small" href="/portal.html">Client Login</a>
-</header>
+<body>
 
-<main>
-<section class="hero">
-  <div class="hero-bg"></div><div class="hero-shade"></div>
-  <div class="hero-inner">
-    <p class="eyebrow light">QADR GLOBAL · FINANCIAL MARKETS · TECHNOLOGY · INTELLIGENCE</p>
-    <h1>Institutional Trading Solutions<br>for a <span>Global World</span></h1>
-    <p class="lead">Combining research, technology and disciplined execution across global financial markets.</p>
-    <div class="buttons"><a class="gold-button" href="#solutions">Explore Solutions</a><a class="dark-outline" href="/portal.html">Client Portal</a></div>
-  </div>
-  <div class="hero-slogan"><b>DISCIPLINE TODAY</b><br>A BRIGHTER TOMORROW</div>
-  <div class="hero-values"><span>◈<b>RESEARCH DRIVEN</b></span><span>✣<b>TECHNOLOGY POWERED</b></span><span>◎<b>GLOBAL PERSPECTIVE</b></span><span>◉<b>CLIENT FOCUSED</b></span></div>
-</section>
+    <header>
+        <a href="#home" class="logo-box">
+            <svg class="exotic-logo-svg" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="exoticGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FDE047" />
+                        <stop offset="50%" stop-color="#D4AF37" />
+                        <stop offset="100%" stop-color="#854D0E" />
+                    </linearGradient>
+                    <linearGradient id="exoticBlue" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#0284C7" />
+                        <stop offset="100%" stop-color="#38BDF8" />
+                    </linearGradient>
+                </defs>
+                <polygon points="50,2 95,27 95,73 50,98 5,73 5,27" fill="none" stroke="url(#exoticGold)" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="50,15 82,32 82,68 50,85 18,68 18,32" fill="rgba(15, 23, 42, 0.7)" stroke="url(#exoticBlue)" stroke-width="1.5"/>
+                <rect x="35" y="35" width="6" height="30" fill="url(#exoticBlue)" rx="2"/>
+                <rect x="47" y="25" width="6" height="50" fill="url(#exoticGold)" rx="2"/>
+                <rect x="59" y="42" width="6" height="18" fill="#10B981" rx="2"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(56,189,248,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+            </svg>
+            <div class="brand-title">QADR <span>GLOBAL</span></div>
+        </a>
 
-<section class="intro" id="company"><div class="eyebrow">ABOUT QADR GLOBAL</div><div><h2>Built for serious traders and institutions.</h2><p>QADR Global develops financial-market technology, intelligence and operating environments built around disciplined workflows, transparent data and modern connectivity.</p><a class="text-link" href="#contact">Learn more →</a></div></section>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#operations">Operations</a>
+            <a href="#contact">Contact</a>
+        </nav>
 
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <div class="theme-switch-wrapper">
+                <span id="themeLabelIcon" style="font-size: 14px;">☀️</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeCheckbox" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button class="btn btn-primary" onclick="openAuthGateway()">Operator Login</button>
+        </div>
+    </header>
 
+    <div class="hero-container" id="home">
+        <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+            <div class="quantum-robot-avatar"></div>
+            <span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 500; text-transform: uppercase;">Quantum Robot Infrastructure & Execution</span>
+            <h1>Advanced Algorithmic Trading & Global Financial Markets Telemetry</h1>
+            <p>QADR Global is a unified multi-user workspace. Authorized operators log in securely with individual credentials to execute quantitative tracking and risk audits.</p>
+            <div>
+                <button class="btn btn-primary" onclick="openAuthGateway()">Access Operator Terminal</button>
+                <a href="#operations" class="btn btn-outline" style="margin-left: 10px;">Explore Operations</a>
+            </div>
+        </div>
+    </div>
 
-<section class="visual-cards" id="solutions">
-  <a class="vcard" href="#company"><img src="/assets/company.jpg" alt="QADR Global company visual"><div><small>01 · COMPANY</small><h3>About QADR Global</h3><p>Built for serious traders and institutions.</p><b>Learn More →</b></div></a>
-  <a class="vcard" href="#solutions"><img src="/assets/solutions.jpg" alt="Technology and analytics visual"><div><small>02 · SOLUTIONS</small><h3>Our Solutions</h3><p>Technology, research, execution.</p><b>Explore Solutions →</b></div></a>
-  <a class="vcard" href="#markets"><img src="/assets/gold.jpg" alt="Gold markets visual"><div><small>03 · MARKETS</small><h3>Global Markets</h3><p>Access opportunities across global markets.</p><b>View Markets →</b></div></a>
-  <a class="vcard" href="#insights"><img src="/assets/global.jpg" alt="Global market visual"><div><small>04 · INSIGHTS</small><h3>Insights</h3><p>Research. Analysis. Perspective.</p><b>Read Insights →</b></div></a>
-</section>
+    <!-- AUTH GATEWAY MODAL -->
+    <div class="auth-gateway-overlay" id="authGatewayModal" style="display: none;">
+        <div class="auth-card">
+            <h3 style="font-size: 18px; margin-bottom: 4px; color: var(--accent-gold); font-weight: 600;">QADR Secure Gateway</h3>
+            <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 15px;">Login with real credentials or register securely.</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab(event, 'loginPane')">Login</button>
+                <button class="auth-tab" onclick="switchAuthTab(event, 'registerPane')">Register</button>
+            </div>
 
-<section class="solutions" id="solutions2">
-  <div class="section-title"><p class="eyebrow">OUR SOLUTIONS</p><h2>Technology, intelligence and disciplined execution.</h2></div>
-  <div class="solution-grid">
-    <article><span>01</span><h3>Market Intelligence</h3><p>Market context, economic events, research and analytics.</p></article>
-    <article><span>02</span><h3>Trading Technology</h3><p>Connectivity, automation, monitoring and market workflows.</p></article>
-    <article><span>03</span><h3>Risk & Performance</h3><p>Account visibility, exposure, drawdown and reporting.</p></article>
-    <article><span>04</span><h3>Client Services</h3><p>A secure digital environment for connected accounts.</p></article>
-  </div>
-</section>
+            <!-- LOGIN PANE -->
+            <div id="loginPane" class="auth-form-pane active">
+                <form onsubmit="handleRealLogin(event)">
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 4px; font-weight: 600;">Operator Email / ID</label>
+                        <input type="text" id="loginEmailOrId" placeholder="youseffa421@gmail.com" style="width: 100%;" required>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 4px; font-weight: 600;">Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="loginPasswordInput" placeholder="••••••••••••" style="width: 100%; padding-right: 40px;" required>
+                            <button type="button" onclick="togglePasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 12px;" id="passToggleBtn">👁️</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 11px;">Access Live Workspace</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; padding: 7px; margin-top: 10px;" onclick="closeAuthGateway()">Cancel</button>
+                </form>
+            </div>
 
-<section class="markets" id="markets">
-  <div><p class="eyebrow light">GLOBAL MARKETS</p><h2>Access opportunities across global markets.</h2><p>Market information is organized around supported instruments and client workflows.</p></div>
-  <div class="market-list">
-    <div><b>FOREX</b><small>Foreign exchange</small></div>
-    <div class="gold-market"><b>XAUUSD</b><small>Gold · Precious metals</small></div>
-    <div><b>INDICES</b><small>Global indices</small></div>
-    <div><b>COMMODITIES</b><small>Supported commodities</small></div>
-  </div>
-</section>
+            <!-- REGISTER PANE -->
+            <div id="registerPane" class="auth-form-pane">
+                <form onsubmit="handleRealRegister(event)">
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 3px; font-weight: 600;">Operator Name</label>
+                        <input type="text" id="regName" placeholder="Youseff Ali" style="width: 100%;" required>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 3px; font-weight: 600;">System Email</label>
+                        <input type="email" id="regEmail" placeholder="youseffa421@gmail.com" style="width: 100%;" required>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 11px; color: var(--text-primary); display: block; margin-bottom: 3px; font-weight: 600;">Create Secure Password</label>
+                        <input type="password" id="regPass" placeholder="••••••••••••" style="width: 100%;" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 11px;">Register Live Account</button>
+                    <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; padding: 7px; margin-top: 8px;" onclick="closeAuthGateway()">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-<section class="technology" id="technology">
-  <div class="eyebrow">TECHNOLOGY INFRASTRUCTURE</div>
-  <h2>One architecture connecting market data, accounts and clients.</h2>
-  <div class="architecture-row">
-    <div class="arch-node"><b>MT5</b><small>Broker Account</small></div><i>→</i>
-    <div class="arch-node"><b>QADR MT5 Bridge</b><small>Live data · heartbeat · logs</small></div><i>→</i>
-    <div class="arch-node"><b>QADR Backend</b><small>API · auth · services</small></div><i>→</i>
-    <div class="arch-node"><b>PostgreSQL</b><small>Accounts · trades · reports</small></div>
-  </div>
-  <div class="arch-outputs"><span>◉ Public Website</span><span>◎ Client Portal</span><span>▣ Audit & Reports</span></div>
-</section>
+    <!-- FULL SCREEN ENTERPRISE PORTAL -->
+    <div class="enterprise-portal-overlay" id="enterprisePortalModal">
+        <div class="shell-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button class="btn btn-outline" style="padding: 6px 10px; border-color: var(--accent-gold);" onclick="toggleSidebar()" title="Toggle Sidebar">
+                    <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg style="width: 22px; height: 22px;" viewBox="0 0 100 100"><polygon points="50,2 95,27 95,73 50,98 5,73 5,27" fill="none" stroke="#D4AF37" stroke-width="5"/><rect x="45" y="25" width="10" height="50" fill="#D4AF37" rx="2"/></svg>
+                    <div>
+                        <h2 style="color: var(--accent-blue); font-size: 13px; font-weight: 600;">QADR Terminal</h2>
+                        <span id="headerClientId" style="color: var(--accent-gold); font-size: 11px; font-weight: 700; font-family: var(--font-mono);">QADR-90214</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-outline" style="font-size: 11px; padding: 4px 8px;" onclick="logoutPortal()">Logout</button>
+        </div>
 
-<section class="insights" id="insights"><div class="eyebrow">INSIGHTS</div><h2>Research. Analysis. Perspective.</h2>
-  <div class="insight-list"><article><img src="/assets/global.jpg" alt=""><div><b>Market Intelligence</b><p>Structured market context and analytical perspectives.</p></div></article>
-  <article><img src="/assets/gold.jpg" alt=""><div><b>Quantitative Research</b><p>Evidence-driven research and systematic analysis.</p></div></article>
-  <article><img src="/assets/solutions.jpg" alt=""><div><b>Technology</b><p>Financial-market infrastructure and automation.</p></div></article></div>
-</section>
+        <div class="shell-body">
+            <div class="shell-viewport" style="padding: 30px;">
+                <h3 style="color: var(--accent-blue); margin-bottom: 15px;">Live Terminal Operations & Account Sync</h3>
+                <p>Welcome to your live institutional terminal workspace. All metrics and sync functions are connected securely to your Render live backend.</p>
+            </div>
+        </div>
+    </div>
 
-<section class="portal-banner" id="portal"><div><p class="eyebrow light">CLIENT PORTAL</p><h2>A secure operating environment for connected accounts.</h2><p>Accounts, performance, risk, execution, reports, documents and audited activity.</p></div><a class="gold-button" href="/portal.html">Open Client Portal →</a></section>
+    <script>
+        // Hapa ndipo URL ya Render yako imewekwa rasmi kwa ajili ya live production
+        const API_BASE_URL = 'https://qadr-global.onrender.com/api';
 
-<section class="contact" id="contact"><div><p class="eyebrow">CONTACT</p><h2>Start a conversation with QADR Global.</h2></div><div><p>Company, platform and client-service enquiries.</p><a href="mailto:support@QadrGlobal.com">support@QadrGlobal.com</a></div></section>
-</main>
-<footer><div class="brand"><img src="/assets/logo.svg" alt="QADR Global"></div><div><b>Quick Links</b><p>Company · Solutions · Markets · Technology · Insights</p></div><div><b>Client</b><p><a href="/portal.html">Open Client Portal →</a></p></div></footer>
-</body></html>
+        async function handleRealRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPass').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await response.json();
+                if(data.success) {
+                    alert(`Registration successful! Operator ID: ${data.operatorId}`);
+                    document.getElementById('headerClientId').innerText = data.operatorId;
+                    closeAuthGateway();
+                    document.getElementById('enterprisePortalModal').style.display = 'flex';
+                } else {
+                    alert(data.error || 'Registration failed.');
+                }
+            } catch(err) {
+                alert('Connection to Render backend failed.');
+            }
+        }
+
+        async function handleRealLogin(e) {
+            e.preventDefault();
+            const emailOrId = document.getElementById('loginEmailOrId').value;
+            const password = document.getElementById('loginPasswordInput').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ emailOrId, password })
+                });
+                const data = await response.json();
+                if(data.success) {
+                    document.getElementById('headerClientId').innerText = data.operatorId;
+                    closeAuthGateway();
+                    document.getElementById('enterprisePortalModal').style.display = 'flex';
+                } else {
+                    alert(data.error || 'Invalid login credentials.');
+                }
+            } catch(err) {
+                alert('Connection to Render backend failed.');
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('loginPasswordInput');
+            const btn = document.getElementById('passToggleBtn');
+            if (passInput.type === 'password') { passInput.type = 'text'; btn.innerText = '🙈'; }
+            else { passInput.type = 'password'; btn.innerText = '👁️'; }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.getElementById('themeLabelIcon').innerText = next === 'dark' ? '☀️' : '🌙';
+        }
+
+        function openAuthGateway() { document.getElementById('authGatewayModal').style.display = 'flex'; }
+        function closeAuthGateway() { document.getElementById('authGatewayModal').style.display = 'none'; }
+        function switchAuthTab(evt, paneId) {
+            document.querySelectorAll('.auth-form-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(paneId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        function logoutPortal() {
+            document.getElementById('enterprisePortalModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
